@@ -10,9 +10,10 @@ namespace Domain.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Username { get; set; }
-
-       // [ForeignKey("TextFileModel")] still neded to check
         public Guid FileName { get; set; }
+        public string Username { get; set; }
+        public int TextFileId { get; set; }
+        public TextFileModel TextFile { get; set; }
+      
     }
 }

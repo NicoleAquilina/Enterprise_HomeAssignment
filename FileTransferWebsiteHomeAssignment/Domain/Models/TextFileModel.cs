@@ -16,7 +16,9 @@ namespace Domain.Models
         public Guid FileName { get; set; }
         public DateTime UploadedOn { get; set;}
         public string Author { get; set; }
+        public string  LastEditedBy { get; set; }
         public DateTime LastUpdated { get; set; }
+        public string FilePath { get; set; }
 
     }
 }
