@@ -13,6 +13,7 @@ namespace Domain.Models
         public int Id { get; set; }
         [Required]
         public string Data { get; set; }
+    
         public Guid FileName { get; set; }
         public DateTime UploadedOn { get; set;}
         public string Author { get; set; }
