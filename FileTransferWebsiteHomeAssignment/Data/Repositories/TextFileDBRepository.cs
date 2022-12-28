@@ -16,18 +16,34 @@ namespace Data.Repositories
             context = _context;
         }
 
-        public IQueryable<TextFileModel> GetFiles()
+        public IQueryable<TextFileModel> GetFilesEntries()
         {
             return context.TextFileModels;
         }
 
-        public void AddItem(TextFileModel i)
+        public void Create(TextFileModel i)
         {
             context.TextFileModels.Add(i);
             context.SaveChanges();
         }
 
-        
+        public IQueryable<AclModel> GetPermissions()
+        { return context.AclModels; }
+
+        public void Share (TextFileModel t)
+        {
+            //need to pass username (email) as a string to share
+
+            AclModel a = new AclModel();
+            a.FileName = t.FileName;
+            a.Username = "Nicole";
+            a.TextFileId = t.Id;
+            a.TextFile = t;
+            context.AclModels.Add(a);
+            context.SaveChanges();
+        }
+      
+
 
     }
 }

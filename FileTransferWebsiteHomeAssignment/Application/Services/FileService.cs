@@ -1,5 +1,6 @@
 ﻿using Application.ViewModels;
 using Data.Repositories;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,21 +17,23 @@ namespace Application.Services
             tr = _textRepository;
         }
 
-        public void createTextFile(CreateTextFileViewModel txtfile)
+        public void createTextFile(CreateTextFileViewModel tfvm)
         {
-            if (tr.GetFiles().Any(i => i.FileName == i.FileName))
-                throw new Exception("File with the same name already exists");
-            else
-            {
-                tr.AddItem(new Domain.Models.TextFileModel()
-                {
-                    Data = txtfile.Data,
-                    FileName = txtfile.FileName,
-                    UploadedOn = txtfile.UploadedOn,
-                    Author = txtfile.Author,
-                    FilePath = txtfile.FilePath
-                });
-            }
+            TextFileModel tfm = new TextFileModel();
+
+            tfm.FileName = tfvm.FileName;
+            tfm.UploadedOn = DateTime.Now;
+            tfm.Data = tfvm.Data;
+            tfm.Author = "nicole";
+            tfm.LastEditedBy = "nicole";
+            tfm.LastUpdated = DateTime.Now;
+           
+
+            tr.Create(tfm);
+
+            //giving permission
+            tr.Share(tfm);
+            
         }
 
 
