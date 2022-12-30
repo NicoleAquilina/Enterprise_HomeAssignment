@@ -58,10 +58,10 @@ namespace Application.Services
             return getFiles().SingleOrDefault(x => x.Id == id);
         }
 
-        public void Edit(int id, CreateTextFileViewModel updatedFile)
+        public void Edit(int id, TextFileViewModel updatedFile)
         {
             tfr.Edit
-                (new Domain.Models.TextFileModel()
+                (id,new Domain.Models.TextFileModel()
                 {
                     Data = updatedFile.Data,
                     LastUpdated = DateTime.Now,

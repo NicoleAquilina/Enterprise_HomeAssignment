@@ -83,37 +83,36 @@ namespace WebApplication1.Controllers
             return View(data);
         }
 
+
         [HttpGet]
         [Authorize]
         public IActionResult Edit(int id)
         {
             var originalFile = service.getFile(id);
 
-            CreateTextFileViewModel model = new CreateTextFileViewModel();
+           TextFileViewModel model = new TextFileViewModel();
             model.Data = originalFile.Data;
 
             return View(model);
         }
 
         [Authorize]
-        public IActionResult Edit(int id, CreateTextFileViewModel data)
+        public IActionResult Edit(int id, TextFileViewModel d)
         {
             try
             {
-                var oldFile = service.getFile(id);
-                if(ModelState.IsValid)
-                {
-                    //string username = User.Identity.Name;
-                }
+                service.Edit(id, d);
 
-                service.Edit(id, data);
-                ViewBag.Message = "File Successfully Updated";
+                TempData["message"] = "File was updated!";
+                return RedirectToAction("List", "TextFile");
             }
             catch (Exception ex)
             {
-                ViewBag.Error = "File wasn't Updated Successfully. Please check your inputs";
+                TempData["error"] = "File wasm't updated successfully!";
+
             }
-            return View(data);
+            return RedirectToAction("List");
+
         }
 
         public IActionResult List()

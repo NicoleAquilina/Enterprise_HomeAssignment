@@ -47,9 +47,9 @@ namespace Data.Repositories
             return context.TextFileModels.SingleOrDefault(x => x.Id == id);
         }
 
-        public void Edit(TextFileModel updatedFile)
+        public void Edit(int id, TextFileModel updatedFile)
         {
-            var originalFile = GetFile(updatedFile.Id);
+            var originalFile = GetFile(id);
 
             originalFile.Data = updatedFile.Data;
             originalFile.LastEditedBy = updatedFile.LastEditedBy;
