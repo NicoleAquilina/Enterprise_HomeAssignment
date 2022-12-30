@@ -1,5 +1,6 @@
 ﻿using Application.Services;
 using Application.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,12 +25,14 @@ namespace WebApplication1.Controllers
 
         }
         [HttpGet]
+        [Authorize]
         public IActionResult Create()
         {
             return View(new CreateTextFileViewModel());
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Create(CreateTextFileViewModel data,IFormFile file)
         {
             try
@@ -79,7 +82,9 @@ namespace WebApplication1.Controllers
 
             return View(data);
         }
+
         [HttpGet]
+        [Authorize]
         public IActionResult Edit(int id)
         {
             var originalFile = service.getFile(id);
@@ -90,6 +95,7 @@ namespace WebApplication1.Controllers
             return View(model);
         }
 
+        [Authorize]
         public IActionResult Edit(int id, CreateTextFileViewModel data)
         {
             try

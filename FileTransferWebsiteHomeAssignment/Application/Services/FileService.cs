@@ -19,6 +19,7 @@ namespace Application.Services
 
         public void createTextFile(CreateTextFileViewModel tfvm)
         {
+            //need to pass username (email) as a string to share
             TextFileModel tfm = new TextFileModel();
 
             tfm.FileName = tfvm.FileName;
