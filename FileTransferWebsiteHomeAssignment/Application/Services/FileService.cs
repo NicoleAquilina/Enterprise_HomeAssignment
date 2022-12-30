@@ -10,11 +10,11 @@ namespace Application.Services
 {
     public class FileService
     {
-        private TextFileDBRepository tr;
-
-        public FileService (TextFileDBRepository _textRepository)
+        
+        public TextFileDBRepository tfr;
+        public FileService (TextFileDBRepository _textFileDBRepository)
         {
-            tr = _textRepository;
+            tfr = _textFileDBRepository;
         }
 
         public void createTextFile(CreateTextFileViewModel tfvm)
@@ -29,13 +29,28 @@ namespace Application.Services
             tfm.LastUpdated = DateTime.Now;
            
 
-            tr.Create(tfm);
+            tfr.Create(tfm);
 
             //giving permission
-            tr.Share(tfm);
+            tfr.Share(tfm);
             
         }
 
+        public IQueryable<TextFileViewModel>getFiles()
+        {
+            var list = from l in tfr.GetFilesEntries()
+                       select new TextFileViewModel()
+                       {
+                           Id = l.Id,
+                           Data = l.Data,
+                           Author = l.Author,
+                           UploadedOn = l.UploadedOn,
+                           FileName = l.FileName,
+                           LastEditedBy = l.LastEditedBy,
+                           LastUpdated =l.LastUpdated
+                       };
+            return list;
+        }
 
     }
 }
