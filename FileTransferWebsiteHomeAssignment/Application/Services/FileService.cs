@@ -52,5 +52,22 @@ namespace Application.Services
             return list;
         }
 
+        public TextFileViewModel getFile(int id)
+        {
+            return getFiles().SingleOrDefault(x => x.Id == id);
+        }
+
+        public void Edit(int id, CreateTextFileViewModel updatedFile)
+        {
+            tfr.Edit
+                (new Domain.Models.TextFileModel()
+                {
+                    Data = updatedFile.Data,
+                    LastUpdated = DateTime.Now,
+                    LastEditedBy = "Lucy"
+                }
+           ) ;
+        }
+
     }
 }

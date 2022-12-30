@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Data.Context
 {
-    public class FileSharingContext : IdentityDbContext
+    public class FileSharingContext : IdentityDbContext<CustomUser>
     {
         public FileSharingContext(DbContextOptions<FileSharingContext> options)
             : base(options)

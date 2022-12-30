@@ -42,6 +42,21 @@ namespace Data.Repositories
             context.AclModels.Add(a);
             context.SaveChanges();
         }
+        public TextFileModel GetFile(int id)
+        {
+            return context.TextFileModels.SingleOrDefault(x => x.Id == id);
+        }
+
+        public void Edit(TextFileModel updatedFile)
+        {
+            var originalFile = GetFile(updatedFile.Id);
+
+            originalFile.Data = updatedFile.Data;
+            originalFile.LastEditedBy = updatedFile.LastEditedBy;
+            originalFile.LastUpdated = updatedFile.LastUpdated;
+
+            context.SaveChanges();
+        }
       
 
 

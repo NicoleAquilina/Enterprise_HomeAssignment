@@ -79,5 +79,41 @@ namespace WebApplication1.Controllers
 
             return View(data);
         }
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var originalFile = service.getFile(id);
+
+            CreateTextFileViewModel model = new CreateTextFileViewModel();
+            model.Data = originalFile.Data;
+
+            return View(model);
+        }
+
+        public IActionResult Edit(int id, CreateTextFileViewModel data)
+        {
+            try
+            {
+                var oldFile = service.getFile(id);
+                if(ModelState.IsValid)
+                {
+                    //string username = User.Identity.Name;
+                }
+
+                service.Edit(id, data);
+                ViewBag.Message = "File Successfully Updated";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "File wasn't Updated Successfully. Please check your inputs";
+            }
+            return View(data);
+        }
+
+        public IActionResult List()
+        {
+            var list = service.getFiles();
+            return View(list);
+        }
     }
 }
