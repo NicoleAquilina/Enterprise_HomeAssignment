@@ -22,19 +22,16 @@ namespace Application.Services
            var list = from p in ar.GetPermissions()
                       select new AclViewModel()
                       {
-                          Id = p.Id,
-                          FileName = p.FileName,
                           Username = p.Username,
                           TextFileId = p.TextFileId
                       };
            return list;
        }
-/*
-       public AclModel getPermission(int fileId , string username)
+       public AclViewModel getPermission(int fileId , string username)
        {
            return getPermissions().SingleOrDefault(x => x.TextFileId == fileId && x.Username == username);
        }
-*/
+
        
     }
 }

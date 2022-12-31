@@ -1,0 +1,55 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model Application.ViewModels.AclViewModel
+
+@{
+    ViewData["Title"] = "Share";
+}
+
+<h1>Share File</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Share" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <input type="hidden" asp-for="TextFileId" class="form-control" />
+                <span asp-validation-for="TextFileId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Select a User:
+                <select name="UserName" class="form-control">
+                    @foreach (var u in Model.Users)
+                    {
+                        if (Model.Username == u.UserName)
+                        {
+                            <option value="@u.UserName" selected>@u.UserName</option>
+                        }
+                        else
+                        {
+                            <option value="@u.UserName">@u.UserName</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="Users" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Share" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="FileList">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

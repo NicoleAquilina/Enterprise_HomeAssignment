@@ -57,8 +57,10 @@ namespace Data.Repositories
 
             context.SaveChanges();
         }
-      
-
+        public IQueryable<CustomUser> GetUsers()
+        {
+            return context.Users;
+        }
 
     }
 }

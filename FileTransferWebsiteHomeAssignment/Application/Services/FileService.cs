@@ -70,5 +70,27 @@ namespace Application.Services
                 }
            );
         }
+
+        public IQueryable<CustomUser> GetAllUsers()
+        {
+            return tfr.GetUsers();
+        }
+
+        public Boolean Share(AclViewModel acl)
+        {
+
+            if (tfr.GetPermissions().Where(a => a.Username == acl.Username && a.FileName == acl.FileName).Count() == 0)
+            {
+                Guid fileId = acl.FileName;
+                TextFileModel t = tfr.GetFile(acl.Id);
+                tfr.Share(t, acl.Username);
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

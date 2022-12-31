@@ -8,7 +8,7 @@ namespace Application.ViewModels
     //selection on the required properties to be used by the presentation layer.
     public class CreateTextFileViewModel
     {
-        [Required(AllowEmptyStrings = false, ErrorMessage ="File Cannot be Blank")]
+        //[Required(AllowEmptyStrings = false, ErrorMessage ="File Cannot be Blank")]
         public string Data { get; set; }
         public string FilePath { get; set; }
         public Guid FileName { get; set; }

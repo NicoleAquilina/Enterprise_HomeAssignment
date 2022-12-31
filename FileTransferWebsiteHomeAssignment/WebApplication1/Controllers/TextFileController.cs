@@ -19,12 +19,13 @@ namespace WebApplication1.Controllers
         private FileService service;
         private IWebHostEnvironment host;
         private FileSharingContext context;
-        public TextFileController(FileService _service, IWebHostEnvironment _host, FileSharingContext _context)
+        private AclServices aclService;
+        public TextFileController(FileService _service, IWebHostEnvironment _host, FileSharingContext _context, AclServices _aclService)
         {
             service = _service;
             host = _host;
             context = _context;
-
+            aclService = _aclService;
         }
         [HttpGet]
         [Authorize]
@@ -67,7 +68,6 @@ namespace WebApplication1.Controllers
                         }
                     }
 
-                   
                     service.createTextFile(data,username.ToString());
                    // service.Create(data, username.ToString());
                     ViewBag.Message = "File successfully inserted in database";
@@ -85,7 +85,34 @@ namespace WebApplication1.Controllers
             return View(data);
         }
 
+        [HttpGet]
+        [Authorize]
+        public IActionResult Share(int id)
+        {
+            string username = User.Identity.Name;
+            AclViewModel model = aclService.getPermission(id,username.ToString());
+            model.Users = service.GetAllUsers();
+            return View(model);
+        }
+        [Authorize]
+        [HttpPost]
+        public IActionResult Share(AclViewModel acl)
+        {
+            //avm.Username = User.Identity.Name;
+            AclViewModel model = aclService.getPermissions().FirstOrDefault(f => f.Username == User.Identity.Name && f.TextFileId == acl.TextFileId);
+            model.Users = service.GetAllUsers();
 
+            if (service.Share(acl) == true)
+            {
+                ViewBag.Message = "File Shared!";
+            }
+            else
+            {
+                ViewBag.Error = "File Can't be shared";
+            }
+            return View(model);
+
+        }
         [HttpGet]
         [Authorize]
         //this gets the data from the database

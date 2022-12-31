@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Domain.Models;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Application.ViewModels
@@ -10,5 +12,6 @@ namespace Application.ViewModels
         public Guid FileName { get; set; }
         public string Username { get; set; }
         public int TextFileId { get; set; }
+        public IQueryable<CustomUser> Users { get; set; }
     }
 }
