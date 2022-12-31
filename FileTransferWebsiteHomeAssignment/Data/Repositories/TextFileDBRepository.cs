@@ -30,13 +30,12 @@ namespace Data.Repositories
         public IQueryable<AclModel> GetPermissions()
         { return context.AclModels; }
 
-        public void Share (TextFileModel t)
+        public void Share (TextFileModel t, string username)
         {
-            //need to pass username (email) as a string to share
 
             AclModel a = new AclModel();
             a.FileName = t.FileName;
-            a.Username = "Nicole";
+            a.Username = username;
             a.TextFileId = t.Id;
             a.TextFile = t;
             context.AclModels.Add(a);
@@ -49,6 +48,7 @@ namespace Data.Repositories
 
         public void Edit(int id, TextFileModel updatedFile)
         {
+            
             var originalFile = GetFile(id);
 
             originalFile.Data = updatedFile.Data;

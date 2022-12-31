@@ -1,5 +1,6 @@
 ﻿using Application.Services;
 using Application.ViewModels;
+using Data.Context;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -17,11 +18,12 @@ namespace WebApplication1.Controllers
     {
         private FileService service;
         private IWebHostEnvironment host;
-
-        public TextFileController(FileService _service, IWebHostEnvironment _host)
+        private FileSharingContext context;
+        public TextFileController(FileService _service, IWebHostEnvironment _host, FileSharingContext _context)
         {
             service = _service;
             host = _host;
+            context = _context;
 
         }
         [HttpGet]
@@ -40,7 +42,7 @@ namespace WebApplication1.Controllers
                 if (ModelState.IsValid)
                 {
 
-                    //string username = User.Identity.Name; //gives you the email/username of the currently logged in user
+                    string username = User.Identity.Name; //gives you the email/username of the currently logged in user
 
                     if (file != null)
                     {
@@ -66,7 +68,7 @@ namespace WebApplication1.Controllers
                     }
 
                    
-                    service.createTextFile(data);
+                    service.createTextFile(data,username.ToString());
                    // service.Create(data, username.ToString());
                     ViewBag.Message = "File successfully inserted in database";
 
@@ -86,6 +88,7 @@ namespace WebApplication1.Controllers
 
         [HttpGet]
         [Authorize]
+        //this gets the data from the database
         public IActionResult Edit(int id)
         {
             var originalFile = service.getFile(id);
@@ -97,14 +100,26 @@ namespace WebApplication1.Controllers
         }
 
         [Authorize]
+        //this stores the newly edited data 
         public IActionResult Edit(int id, TextFileViewModel d)
         {
             try
             {
-                service.Edit(id, d);
+                string username = User.Identity.Name;
+                var item = context.Users.Where(s => s.Email.Equals(username)).FirstOrDefault();
 
-                TempData["message"] = "File was updated!";
-                return RedirectToAction("List", "TextFile");
+                if(item!=null)
+                {
+                    service.Edit(id, d, username.ToString());
+
+                    TempData["message"] = "File was updated!";
+                }
+                else
+                {
+                    TempData["error"] = "You are not a Logged In User!!";
+
+                }
+
             }
             catch (Exception ex)
             {

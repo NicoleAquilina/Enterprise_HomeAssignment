@@ -10,34 +10,35 @@ namespace Application.Services
 {
     public class FileService
     {
-        
+
         public TextFileDBRepository tfr;
-        public FileService (TextFileDBRepository _textFileDBRepository)
+        public FileService(TextFileDBRepository _textFileDBRepository)
         {
             tfr = _textFileDBRepository;
         }
 
-        public void createTextFile(CreateTextFileViewModel tfvm)
+        public void createTextFile(CreateTextFileViewModel tfvm, string username)
         {
+
             //need to pass username (email) as a string to share
             TextFileModel tfm = new TextFileModel();
 
             tfm.FileName = tfvm.FileName;
             tfm.UploadedOn = DateTime.Now;
             tfm.Data = tfvm.Data;
-            tfm.Author = "nicole";
-            tfm.LastEditedBy = "nicole";
+            tfm.Author = username;
+            tfm.LastEditedBy = username;
             tfm.LastUpdated = DateTime.Now;
-           
+
 
             tfr.Create(tfm);
 
             //giving permission
-            tfr.Share(tfm);
-            
+            tfr.Share(tfm, username);
+
         }
 
-        public IQueryable<TextFileViewModel>getFiles()
+        public IQueryable<TextFileViewModel> getFiles()
         {
             var list = from l in tfr.GetFilesEntries()
                        select new TextFileViewModel()
@@ -48,27 +49,26 @@ namespace Application.Services
                            UploadedOn = l.UploadedOn,
                            FileName = l.FileName,
                            LastEditedBy = l.LastEditedBy,
-                           LastUpdated =l.LastUpdated
+                           LastUpdated = l.LastUpdated
                        };
             return list;
         }
-
+       
         public TextFileViewModel getFile(int id)
         {
             return getFiles().SingleOrDefault(x => x.Id == id);
         }
 
-        public void Edit(int id, TextFileViewModel updatedFile)
+        public void Edit(int id, TextFileViewModel updatedFile, string username)
         {
             tfr.Edit
-                (id,new Domain.Models.TextFileModel()
+                (id, new Domain.Models.TextFileModel()
                 {
                     Data = updatedFile.Data,
                     LastUpdated = DateTime.Now,
-                    LastEditedBy = "Lucy"
+                    LastEditedBy = username
                 }
-           ) ;
+           );
         }
-
     }
 }

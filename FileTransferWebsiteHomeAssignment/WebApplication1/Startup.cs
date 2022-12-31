@@ -1,6 +1,7 @@
 using Application.Services;
 using Data.Context;
 using Data.Repositories;
+using Domain.Interfaces;
 using Domain.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,6 +42,9 @@ namespace WebApplication1
 
             services.AddScoped<FileService>();
             services.AddScoped<TextFileDBRepository>();
+
+            services.AddScoped<AclServices>();
+            services.AddScoped<IAclRepository, AclRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
