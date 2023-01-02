@@ -64,16 +64,29 @@ namespace Application.Services
             return getFiles().SingleOrDefault(x => x.Id == id);
         }
 
-        public void Edit(int id, TextFileViewModel updatedFile, string username)
+        //public void           
+        public Boolean Edit(int id, TextFileViewModel updatedFile, string username)
         {
-            tfr.Edit
+            TextFileModel currentFile = tfr.GetFile(id);
+            if(tfr.checkHashCode(currentFile) == true)
+            {
+                tfr.Edit
                 (id, new Domain.Models.TextFileModel()
                 {
                     Data = updatedFile.Data,
                     LastUpdated = DateTime.Now,
                     LastEditedBy = username
                 }
-           );
+                );
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        
+            
         }
 
         public IQueryable<CustomUser> GetAllUsers()

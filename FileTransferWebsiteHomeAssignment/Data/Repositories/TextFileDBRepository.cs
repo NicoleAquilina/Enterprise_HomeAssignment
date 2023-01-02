@@ -3,6 +3,7 @@ using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Data.Repositories
@@ -41,6 +42,23 @@ namespace Data.Repositories
             context.AclModels.Add(a);
             context.SaveChanges();
         }
+        public Boolean checkHashCode(TextFileModel f)
+        {
+            string updatedHashedData = "";
+            using (MD5 hash = MD5.Create())
+            {
+                updatedHashedData = Convert.ToBase64String(hash.ComputeHash(Encoding.UTF8.GetBytes(f.Data)));
+            }
+            TextFileModel currentFile = GetFile(f.Id);
+            if(updatedHashedData == currentFile.DataHash)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public TextFileModel GetFile(int id)
         {
             return context.TextFileModels.SingleOrDefault(x => x.Id == id);
@@ -55,6 +73,12 @@ namespace Data.Repositories
             originalFile.LastEditedBy = updatedFile.LastEditedBy;
             originalFile.LastUpdated = updatedFile.LastUpdated;
 
+            string updatedHashCode = "";
+            using (MD5 hash = MD5.Create())
+            {
+                updatedHashCode = Convert.ToBase64String(hash.ComputeHash(Encoding.UTF8.GetBytes(updatedFile.Data)));
+            }
+            originalFile.DataHash = updatedHashCode;
             context.SaveChanges();
         }
         public IQueryable<CustomUser> GetUsers()

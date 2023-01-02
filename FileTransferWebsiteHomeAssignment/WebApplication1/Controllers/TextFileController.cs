@@ -137,9 +137,16 @@ namespace WebApplication1.Controllers
                 var permission = aclService.getPermission(id, username.ToString());
                 if (item!=null && permission!=null)
                 {
-                    service.Edit(id, d, username.ToString());
+                    bool check= service.Edit(id, d, username.ToString());
 
-                    TempData["message"] = "File was updated!";
+                    if(check == true)
+                    {
+                        TempData["message"] = "File was updated!";
+                    }
+                    else
+                    {
+                        TempData["message"] = "File was not Updated!";
+                    }
                 }
                 else
                 {
