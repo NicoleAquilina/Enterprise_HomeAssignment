@@ -134,8 +134,8 @@ namespace WebApplication1.Controllers
             {
                 string username = User.Identity.Name;
                 var item = context.Users.Where(s => s.Email.Equals(username)).FirstOrDefault();
-
-                if(item!=null)
+                var permission = aclService.getPermission(id, username.ToString());
+                if (item!=null && permission!=null)
                 {
                     service.Edit(id, d, username.ToString());
 
@@ -143,7 +143,7 @@ namespace WebApplication1.Controllers
                 }
                 else
                 {
-                    TempData["error"] = "You are not a Logged In User!!";
+                    TempData["error"] = "You dont have the permissions";
 
                 }
 

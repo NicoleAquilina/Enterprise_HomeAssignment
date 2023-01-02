@@ -19,6 +19,7 @@ namespace Domain.Models
         public string Author { get; set; }
         public string  LastEditedBy { get; set; }
         public DateTime LastUpdated { get; set; }
+        public string DataHash { get; set; }
         public string FilePath { get; set; }
 
     }

@@ -4,6 +4,7 @@ using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Application.Services
@@ -29,7 +30,11 @@ namespace Application.Services
             tfm.Author = username;
             tfm.LastEditedBy = username;
             tfm.LastUpdated = DateTime.Now;
-
+            //https://social.msdn.microsoft.com/Forums/en-US/bd1085fe-f042-4dd4-a9f2-cd0704b22e36/how-to-convert-text-into-md5?forum=aspgettingstarted
+            using (MD5 hash = MD5.Create())
+            {
+                tfm.DataHash = Convert.ToBase64String(hash.ComputeHash(Encoding.UTF8.GetBytes(tfm.Data)));
+            }
 
             tfr.Create(tfm);
 
