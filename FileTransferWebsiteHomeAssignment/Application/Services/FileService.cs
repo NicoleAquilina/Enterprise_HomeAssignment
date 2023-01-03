@@ -12,7 +12,7 @@ namespace Application.Services
     public class FileService
     {
 
-        public TextFileDBRepository tfr;
+        private TextFileDBRepository tfr;
         public FileService(TextFileDBRepository _textFileDBRepository)
         {
             tfr = _textFileDBRepository;

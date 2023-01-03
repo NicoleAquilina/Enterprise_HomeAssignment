@@ -17,5 +17,6 @@ namespace Data.Context
         //abstraction of the tables that are in the Db
         public DbSet<AclModel> AclModels { get; set; } 
         public DbSet<TextFileModel> TextFileModels { get; set; }
+        public DbSet<Log> Logs { get; set; }
     }
 }
