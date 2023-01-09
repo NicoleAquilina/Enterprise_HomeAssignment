@@ -1,9 +1,11 @@
 ﻿using Application.ViewModels;
 using Data.Repositories;
+using Domain.Interfaces;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -13,34 +15,43 @@ namespace Application.Services
     {
 
         private TextFileDBRepository tfr;
-        public FileService(TextFileDBRepository _textFileDBRepository)
+        private ILogRepository ir;
+        public FileService(TextFileDBRepository _textFileDBRepository,ILogRepository _logRepository)
         {
             tfr = _textFileDBRepository;
+            ir = _logRepository;
         }
 
         public void createTextFile(CreateTextFileViewModel tfvm, string username)
         {
-
-            //need to pass username (email) as a string to share
-            TextFileModel tfm = new TextFileModel();
-
-            tfm.FileName = tfvm.FileName;
-            tfm.UploadedOn = DateTime.Now;
-            tfm.Data = tfvm.Data;
-            tfm.Author = username;
-            tfm.LastEditedBy = username;
-            tfm.LastUpdated = DateTime.Now;
-            //https://social.msdn.microsoft.com/Forums/en-US/bd1085fe-f042-4dd4-a9f2-cd0704b22e36/how-to-convert-text-into-md5?forum=aspgettingstarted
-            using (MD5 hash = MD5.Create())
+            try
             {
-                tfm.DataHash = Convert.ToBase64String(hash.ComputeHash(Encoding.UTF8.GetBytes(tfm.Data)));
+                //need to pass username (email) as a string to share
+                TextFileModel tfm = new TextFileModel();
+
+                tfm.FileName = tfvm.FileName;
+                tfm.UploadedOn = DateTime.Now;
+                tfm.Data = tfvm.Data;
+                tfm.Author = username;
+                tfm.LastEditedBy = username;
+                tfm.LastUpdated = DateTime.Now;
+                //https://social.msdn.microsoft.com/Forums/en-US/bd1085fe-f042-4dd4-a9f2-cd0704b22e36/how-to-convert-text-into-md5?forum=aspgettingstarted
+                using (MD5 hash = MD5.Create())
+                {
+                    tfm.DataHash = Convert.ToBase64String(hash.ComputeHash(Encoding.UTF8.GetBytes(tfm.Data)));
+                }
+
+                tfr.Create(tfm);
+
+                //giving permission
+                tfr.Share(tfm, username);
+                string ipAddress = Dns.GetHostName();
+                ir.log("File Created :", username, tfm.Data, ipAddress);
+            }catch(Exception ex)
+            {
+                string ipAddress = Dns.GetHostName();
+                ir.log(ex,username,ipAddress);
             }
-
-            tfr.Create(tfm);
-
-            //giving permission
-            tfr.Share(tfm, username);
-
         }
 
         public IQueryable<TextFileViewModel> getFiles()
@@ -78,14 +89,14 @@ namespace Application.Services
                     LastEditedBy = username
                 }
                 );
-
+                string ipAddress = Dns.GetHostName();
+                ir.log("File Edited :", username, updatedFile.Data, ipAddress);
                 return true;
             }
             else
             {
                 return false;
             }
-        
             
         }
 

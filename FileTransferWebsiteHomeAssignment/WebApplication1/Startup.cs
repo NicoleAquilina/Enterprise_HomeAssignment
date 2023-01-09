@@ -42,7 +42,7 @@ namespace WebApplication1
 
             services.AddScoped<FileService>();
             services.AddScoped<TextFileDBRepository>();
-
+            services.AddScoped<ILogRepository,LogViaDbRepository>();
             services.AddScoped<AclServices>();
             services.AddScoped<IAclRepository, AclRepository>();
         }
