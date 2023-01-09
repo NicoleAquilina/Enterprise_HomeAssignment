@@ -42,9 +42,20 @@ namespace WebApplication1
 
             services.AddScoped<FileService>();
             services.AddScoped<TextFileDBRepository>();
-            services.AddScoped<ILogRepository,LogViaDbRepository>();
             services.AddScoped<AclServices>();
             services.AddScoped<IAclRepository, AclRepository>();
+
+            string approach = Configuration.GetSection("approach").Value;
+            if(approach == "db")
+            {
+                services.AddScoped<ILogRepository, LogViaDbRepository>();
+            }
+            else
+            {
+                services.AddScoped<ILogRepository, LogViaEmailRepository>();
+            }
+
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
