@@ -4,9 +4,9 @@ using Domain.Models;
 using MimeKit;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Mail;
 using System.Text;
-using MailKit.Net.Smtp;
 
 namespace Data.Repositories
 {
@@ -21,27 +21,45 @@ namespace Data.Repositories
 
         public void log(string message, string user, string changes, string ipAddress)
         {
-            //implemented but not working correclty
-            var mail = new MimeMessage();
-            mail.From.Add(new MailboxAddress("Test Project", "fileTransfering@gmail.com"));
-            mail.To.Add(new MailboxAddress("nicole", "nicole2611november@gmail.com"));
-            mail.Subject = message + " by user " + user;
-            mail.Body = new TextPart("plain")
+            Log log = new Log()
             {
-                Text = "Changes done are "+changes
+                Message = message,
+                IpAddress = ipAddress,
+                User = user,
+                Timestamp = DateTime.Now
             };
-            using(var client = new MailKit.Net.Smtp.SmtpClient())
-            {
-                client.Connect("smtp.gmail.com", 587, false);
-                //client.Authenticate("fileTransfering@gmail.com","visualstudio");
-                client.Send(mail);
-                client.Disconnect(true);
-            }
+            //do an outlook account
+            SmtpClient smtpClient = new SmtpClient("smtp-mail.outlook.com", 587);
+            smtpClient.EnableSsl = true;
+            smtpClient.Credentials = new NetworkCredential("mvctesting123@outlook.com", "Mc@st123");
+
+            MailMessage mail = new MailMessage();
+            mail.To.Add("mvctesting123@outlook.com");
+            mail.From = new MailAddress("mvctesting123@outlook.com");
+            mail.Body = $"{log.Timestamp} - {log.User} - {log.IpAddress} - {log.Message}";
+            mail.Subject = "Log File";
+            smtpClient.Send(mail);
         }
 
         public void log(Exception ex, string user, string ipAddress)
         {
-            throw new NotImplementedException();
+            Log log = new Log()
+            {
+                Message = $"Error Message {ex.Message} \n Inner Exception {ex.InnerException}",
+                IpAddress = ipAddress,
+                User = user,
+                Timestamp = DateTime.Now
+            };
+            SmtpClient smtpClient = new SmtpClient("smtp-mail.outlook.com", 587);
+            smtpClient.EnableSsl = true;
+            smtpClient.Credentials = new NetworkCredential("mvctesting123@outlook.com", "Mc@st123");
+
+            MailMessage mail = new MailMessage();
+            mail.To.Add("mvctesting312@outlook.com");
+            mail.From = new MailAddress("mvctesting123@oultook.com");
+            mail.Body = $"{log.Timestamp} - {log.User} - {log.IpAddress} - {log.Message}";
+            mail.Subject = "Log File";
+            smtpClient.Send(mail);
         }
     }
 }

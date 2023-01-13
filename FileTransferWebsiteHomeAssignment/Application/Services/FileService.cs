@@ -46,7 +46,7 @@ namespace Application.Services
                 //giving permission
                 tfr.Share(tfm, username);
                 string ipAddress = Dns.GetHostName();
-                ir.log("File Created :", username, tfm.Data, ipAddress);
+                ir.log("File Created", username, tfm.Data, ipAddress);
             }catch(Exception ex)
             {
                 string ipAddress = Dns.GetHostName();
