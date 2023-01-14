@@ -51,15 +51,15 @@ namespace WebApplication1.Controllers
                         Guid uniqueFilename = System.Guid.NewGuid();
                         string uniqueFilenameStr = uniqueFilename.ToString() + System.IO.Path.GetExtension(file.FileName);
 
-                        string absolutePath = host.ContentRootPath; 
+                        string absolutePath = host.WebRootPath; 
 
-                        using (FileStream fsOut = new FileStream(absolutePath + "\\Data\\Files\\" + uniqueFilenameStr, FileMode.CreateNew))
+                        using (FileStream fsOut = new FileStream(absolutePath + "\\Files\\" + uniqueFilenameStr, FileMode.CreateNew))
                         {
                             file.CopyTo(fsOut);
                         }
 
 
-                        data.FilePath = "\\Data\\Files\\" + uniqueFilenameStr;
+                        data.FilePath = "/Files/" + uniqueFilenameStr;
                         data.FileName = uniqueFilename;
                         using (var readFile = new StreamReader(absolutePath + data.FilePath))
                         {
